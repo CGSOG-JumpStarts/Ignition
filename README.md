@@ -14,6 +14,7 @@ Ignition is a GitHub Copilot skill that turns your agentic coding tool into a pr
 | [Node.js](https://nodejs.org/) 18+ | Required to run the PptxGenJS generation scripts |
 | [Python](https://www.python.org/) 3.10+ | Required for content extraction and QA tooling |
 | [LibreOffice](https://www.libreoffice.org/) | Required for PDF conversion during visual QA |
+| [Poppler](https://poppler.freedesktop.org/) (`pdftoppm`) | Required to convert PDF slides to images for visual QA |
 
 > **Agent Mode required.** Ignition uses `.github/agents/` — you need GitHub Copilot agent mode enabled. In VS Code, open Copilot Chat and switch the mode selector from **Ask** or **Edit** to **Agent**.
 
@@ -34,11 +35,24 @@ cd Ignition
 # Python tools (content extraction, QA, thumbnails)
 pip install "markitdown[pptx]" Pillow
 
-# Node.js tools (slide generation)
-npm install -g pptxgenjs
+# LibreOffice — macOS
+brew install --cask libreoffice
+# LibreOffice — Ubuntu/Debian
+apt install libreoffice
+
+# Poppler (pdftoppm) — macOS
+brew install poppler
+# Poppler (pdftoppm) — Ubuntu/Debian
+apt install poppler-utils
 ```
 
-> LibreOffice is required for PDF conversion (visual QA). It is listed in Prerequisites above. Install it via your OS package manager (`brew install --cask libreoffice` on macOS, `apt install libreoffice` on Ubuntu/Debian).
+> **Note on PptxGenJS:** The `@Generator` agent creates a `package.json` in each output folder and runs `npm install` there automatically before executing `generate-deck.js`. No global `pptxgenjs` install is needed. If you want to run a generated `generate-deck.js` manually, first run `npm install` inside that output folder:
+>
+> ```bash
+> cd output/YYYY-MM-DD-your-topic
+> npm install
+> node generate-deck.js
+> ```
 
 ### 3. Open the Folder in VS Code
 
@@ -225,4 +239,4 @@ output/                             ← generated decks land here (git-ignored)
 
 ## License
 
-The Ignition skill and agents are proprietary. All rights reserved.
+The Ignition skill and agents are proprietary. All rights reserved. See the `LICENSE.txt` file in the repository root for the complete license terms. If `LICENSE.txt` is not present, all contents of this repository should be treated as "all rights reserved" and may not be used, copied, modified, or distributed without explicit permission from the authors.
